@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"net"
-	"sort"
 	"strconv"
 	"strings"
+	"sync"
+	"xrkRce/config"
 	"xrkRce/rce"
 )
 
@@ -42,26 +43,28 @@ func parsePortsToScan(portsFlag string) ([]int, error) {
 	return results, nil
 }
 
-func worker(host string, portsChan <-chan int, resultsChan chan<- int) {
-	for p := range portsChan {
-		address := fmt.Sprintf("%s:%d", host, p)
+func worker(portsChan <-chan iplist, results *[]iplist, jobDoneWaiter *sync.WaitGroup) {
+	defer jobDoneWaiter.Done()
+
+	for target := range portsChan {
+		address := fmt.Sprintf("%s:%d", target.ip, target.port)
 		conn, err := net.Dial("tcp", address)
 		if err != nil {
 			//fmt.Printf("%d CLOSED (%s)\n", p, err)
-			resultsChan <- 0
 			continue
 		}
 		conn.Close()
-		resultsChan <- p
+		*results = append(*results, target)
 	}
 }
 
-func printResults(ports []int) {
-	sort.Ints(ports)
+func printResults(results []iplist) {
 	//fmt.Println("\nResults\n--------------")
-	for _, p := range ports {
+	fmt.Println(results)
+	for _, result := range results {
 		//fmt.Println("%d - open\n", p)
-		pp := strconv.Itoa(p)
+		config.SetIp(result.ip)
+		pp := strconv.Itoa(result.port)
 		rce.GetWebInfo(pp)
 	}
 }

